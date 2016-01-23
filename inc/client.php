@@ -41,4 +41,37 @@ function display_in_post($content){
 }
 add_filter('the_content','display_in_post');
 
+//add various fields to the json output
+function add_fields_to_rest() {
+
+	register_api_field('post', 
+		'author_name',
+		array(
+			'get_callback' => 'tr_get_author_name',
+			'update_callback' => null,
+			'scheme' => null
+			)
+		);
+
+	register_api_field('post', 
+		'featured_image_src',
+		array(
+			'get_callback' => 'get_featured_image_src',
+			'update_callback' => null,
+			'scheme' => null
+			)
+		);
+
+}
+add_action( 'rest_api_init', 'add_fields_to_rest' );
+
+function tr_get_author_name($object, $field_name, $request) {
+	return get_the_author_meta( 'display_name' );
+}
+
+function get_featured_image_src($object, $field_name, $request) {
+	$featured_array = wp_get_attachment_image_src( $object[ 'featured_image' ], 'thumbnail', false);
+	return $featured_array[0];
+}
+
 ?>

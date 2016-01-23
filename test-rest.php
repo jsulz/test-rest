@@ -63,9 +63,19 @@ if( ! class_exists( 'TEST_REST' ) ) {
 
 			if ( is_single() && is_main_query() ) {
 
-				wp_enqueue_style( 'test-rest-styles', plugin_dir_url( __FILE__ ) . 'css/styles.css', array(), '0.1', 'all' );
-				//wp_enqueue_script( 'javascript', TEST_REST_JS . 'script.js' , $deps, $ver, $in_footer );
+				wp_enqueue_style( 'test-rest-styles', plugin_dir_url( __FILE__ ) . 'css/styles.css', array(), '0.11', 'all' );
+				wp_enqueue_script( 'javascript', plugin_dir_url( __FILE__ ) . 'js/ajax.js' , array('jquery'), '.11', true );
 
+				global $post;
+				$post_id = $post->ID;
+
+				wp_localize_script( 'javascript', 'postdata', 
+
+					array(
+						'json_url' => building_url(),
+						'post_id' => $post_id
+						)
+				 );
 			}
 
 		}
